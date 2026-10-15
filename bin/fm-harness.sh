@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Detect the agent harness this process tree runs on.
-# Usage: fm-harness.sh                  print own harness: claude|codex|opencode|pi|pi-signed|grok|kimi|cursor|gemini|muse|rovo|omp|agy|devin|kilo|unknown
+# Usage: fm-harness.sh                  print own harness: claude|codex|opencode|pi|pi-signed|grok|kimi|cursor|gemini|muse|rovo|omp|agy|devin|kilo|commandcode|unknown
 #        fm-harness.sh crew             print the effective CREWMATE harness
 #                                        (config/crew-harness; "default" resolves to own)
 #        fm-harness.sh secondmate       print the harness the PRIMARY uses to launch
@@ -159,7 +159,7 @@ harness_marker() {
   # identified, and any rule that must be RELIABLE under grok has to test the hook
   # markers too (see .claude/settings.json Stop entries, docs/turnend-guard.md).
   [ "${GROK_AGENT:-}" = "1" ] && { echo grok; return; }
-  # codex, opencode, kimi, muse, agy, devin, and kilo publish no
+  # codex, opencode, kimi, muse, agy, devin, kilo, and commandcode publish no
   # harness-identity marker at all, so they are never named here and are
   # identified by ancestry alone. That is the
   # whole reason a foreign marker must not outrank ancestry: with markers winning
@@ -278,6 +278,11 @@ harness_process_verdict() {  # <pid>
     # so unrelated commands are not misread as this harness.
     kilo) echo "comm kilo"; return ;;
     devin) echo "comm devin"; return ;;
+    # Command Code runs as a node bundle that sets its own process title, so
+    # the kernel process name is exactly `command-code` (verified, Command Code
+    # 1.74.1: comm=command-code and the rewritten argv is the same word).
+    # Anchored, so an unrelated command containing that fragment never matches.
+    command-code) echo "comm commandcode"; return ;;
     node*|python*)
       # Bare interpreter: match the harness name in its script path.
       args=$(ps -o args= -p "$pid" 2>/dev/null)
@@ -436,7 +441,7 @@ supervision_primary_pin() {
   local pin=${FM_SUPERVISION_PRIMARY_HARNESS:-}
   [ "${FM_SUPERVISION_ACTOR:-}" = branch ] && [ -n "$pin" ] || return 0
   case "$pin" in
-    claude|codex|opencode|pi|pi-signed|grok|kimi|cursor|gemini|muse|rovo|omp|agy|devin|kilo)
+    claude|codex|opencode|pi|pi-signed|grok|kimi|cursor|gemini|muse|rovo|omp|agy|devin|kilo|commandcode)
       printf '%s\n' "$pin"
       ;;
     *)

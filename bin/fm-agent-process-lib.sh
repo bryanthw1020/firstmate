@@ -52,8 +52,9 @@ fm_agent_process_classify_name() {  # <path> [argv0] -> agent|shell|other
     # claims an unrelated command. kilo (Kilo Code, an OpenCode fork) is
     # anchored the same way: its live process name is the bare word `kilo`
     # (verified live, kilo 7.8.8), so a `*kilo*` glob would claim unrelated
-    # commands containing that fragment.
-    agy|devin|kilo) printf 'agent' ;;
+    # commands containing that fragment. Command Code is anchored on its own
+    # process title (verified, Command Code 1.74.1: comm=command-code).
+    agy|devin|kilo|command-code) printf 'agent' ;;
     zsh|bash|sh|dash|ash|ksh|mksh|tcsh|csh|fish) printf 'shell' ;;
     *)
       if fm_harness_path_name "$path" >/dev/null || fm_harness_path_name "$argv0" >/dev/null; then
