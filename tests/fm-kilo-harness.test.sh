@@ -298,6 +298,59 @@ test_kilo_secondmate_launch_uses_the_persistent_model() {
   pass "fm-spawn: a real kilo secondmate launch runs the persistent supervision model"
 }
 
+# The .kilo guard port makes the same write-to-child-stdin as its OpenCode
+# sibling. A child free to exit without reading makes that write fail with
+# EPIPE, and an unhandled stdin 'error' event takes the whole host process
+# down. The blind-turn text here is larger than a pipe buffer, so the write to
+# an encoder that refuses the input cannot complete: the guard must report the
+# refusal by staying silent, not by killing the session.
+test_kilo_turnend_guard_survives_an_encoder_that_never_reads_stdin() {
+  local guard_plugin repo guard_log out status
+  guard_plugin="$ROOT/.kilo/plugin/fm-primary-turnend-guard.js"
+  repo="$TMP_ROOT/kilo-guard-encoder-root"
+  guard_log="$TMP_ROOT/kilo-guard-encoder-guard.log"
+  mkdir -p "$repo/bin"
+  cat > "$repo/bin/fm-turnend-guard.sh" <<'SH'
+#!/usr/bin/env bash
+printf 'guard\n' >> "${FM_GUARD_LOG:?}"
+printf 'watcher: FAILED - %s\n' "$(head -c 200000 /dev/zero | tr '\0' 'x')" >&2
+exit 2
+SH
+  cat > "$repo/bin/fm-operational-input.sh" <<'SH'
+#!/usr/bin/env bash
+printf 'operational-input: refused\n' >&2
+exit 1
+SH
+  chmod +x "$repo/bin/fm-turnend-guard.sh" "$repo/bin/fm-operational-input.sh"
+  out=$(GUARD_PLUGIN="$guard_plugin" WORKTREE="$repo" FM_GUARD_LOG="$guard_log" node 2>&1 <<'EOF'
+import { existsSync } from "node:fs";
+import { pathToFileURL } from "node:url";
+
+const guardMod = await import(pathToFileURL(process.env.GUARD_PLUGIN).href);
+let prompts = 0;
+const client = { session: { promptAsync: async () => { prompts += 1; } } };
+const guardHooks = await guardMod.default.server({
+  client,
+  directory: process.env.WORKTREE,
+  worktree: process.env.WORKTREE,
+});
+await guardHooks.event({ event: { type: "session.idle", properties: { sessionID: "session-test" } } });
+if (!existsSync(process.env.FM_GUARD_LOG)) {
+  console.error("turn-end guard did not run");
+  process.exit(1);
+}
+if (prompts !== 0) {
+  console.error(`guard prompted ${prompts} times despite an encoder that refused the input`);
+  process.exit(1);
+}
+EOF
+)
+  status=$?
+  expect_code 0 "$status" "kilo turn-end guard must survive an encoder that never reads its stdin ($out)"
+  [ -z "$out" ] || fail "kilo guard encoder test printed output: $out"
+  pass "kilo turn-end guard survives an encoder that never reads stdin"
+}
+
 test_kilo_ancestry_detects_the_native_command_name
 test_kilo_ancestry_rejects_unrelated_mentions
 test_kilo_claims_no_fork_lineage_or_inherited_marker
@@ -309,3 +362,4 @@ test_kilo_tmux_names_the_native_binary_an_agent
 test_kilo_launch_shape_records_model_and_omits_effort_and_worktree
 test_kilo_spawn_arms_no_busy_wiring
 test_kilo_secondmate_launch_uses_the_persistent_model
+test_kilo_turnend_guard_survives_an_encoder_that_never_reads_stdin

@@ -35,6 +35,7 @@ export function encodeFirstmateOperationalInput(root, kind, content) {
       }
       reject(new Error(stderr.trim() || `operational-input encoder exited ${code ?? "unknown"}`));
     });
+    child.stdin.on("error", () => {});
     child.stdin.end(content);
   });
 }
