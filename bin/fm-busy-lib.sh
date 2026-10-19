@@ -95,12 +95,13 @@
 # a real busy verdict once any hook has posted, and it defers to whatever
 # harness-specific trust pre-registration already exists (fm-claude-trust.sh,
 # GEMINI_CLI_TRUST_WORKSPACE) to stop the dialog from appearing at all.
-# Apart from the launch-prompt backstop above, Grok, Rovo, and AGY are the ONLY
-# rendered-text busy fallbacks that survive the redesign, because none of their
-# structured lifecycles was credited-live-verified
+# Apart from the launch-prompt backstop above, Grok, Rovo, AGY, and Kilo are the
+# ONLY rendered-text busy fallbacks that survive the redesign, because none of
+# their structured lifecycles was credited-live-verified
 # in the approved audit (Rovo's clean ACP stopReason lives outside the TUI
 # path firstmate drives, see references/harness/rovo.md; agy 1.2.0 exposes no
-# hook surface at all, see references/harness/agy.md); each is scoped to
+# hook surface at all, and kilo 7.8.8 exposes no hook surface either, see
+# references/harness/agy.md and references/harness/kilo.md); each is scoped to
 # its own harness= and can never classify another adapter. The delivery
 # guards in bin/fm-composer-lib.sh match rendered footers for submit
 # acknowledgement and away-mode supervisor injection only; neither is a
@@ -928,7 +929,7 @@ fm_busy_kilo_tail_busy() {
 # --- launch-prompt signatures (fm_busy_launch_prompt_parked) ----------------
 #
 # Each function consumes a captured pane tail on stdin (the caller's whole
-# tail40, NOT reduced to the last 12 non-blank lines the way the Grok/Rovo/AGY
+# tail40, NOT reduced to the last 12 non-blank lines the way the Grok/Rovo/AGY/Kilo
 # busy footers above are): a bordered dialog box renders many short lines of
 # pure border/padding (`│  ...  │`) that are NOT whitespace-only, so a 12-line
 # non-blank reduction was verified live to push the box's own heading text
@@ -1036,7 +1037,7 @@ fm_busy_launch_prompt_parked() {  # <harness>
 # caller has already established as present. Prints "<verdict> <source>":
 # busy|idle|unknown plus the producing source (see header). Never probes
 # process state. <tail40> is optional pre-captured plain output: the grok,
-# rovo, and agy arms capture it themselves through fm_backend_capture when it
+# rovo, agy, and kilo arms capture it themselves through fm_backend_capture when it
 # is absent (or report unknown capture-failed if that is unavailable too),
 # while the launch-prompt backstop below has no capture fallback of its own -
 # without a supplied tail40 it is skipped entirely and a record still pinned
@@ -1234,7 +1235,7 @@ fm_busy_classify_live() {  # <backend> <target> <harness> <id> <state-dir> [expe
 # consumer resolves backend, target, and harness the same way instead of
 # re-deriving them. Requires fm-backend.sh to be sourced. <tail40> is
 # optional pre-captured plain output reused by the contract's rendered-text
-# checks: the Grok/Rovo/AGY busy fallbacks and the launch-prompt backstop.
+# checks: the Grok/Rovo/AGY/Kilo busy fallbacks and the launch-prompt backstop.
 fm_busy_classify_meta() {  # <meta-file> <id> <state-dir> [tail40]
   local meta=$1 id=$2 state=$3 tail40=${4-} backend target harness
   [ -f "$meta" ] || { printf 'unknown missing'; return 0; }

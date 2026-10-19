@@ -36,7 +36,7 @@ The base TUI exposes no reasoning-effort flag, so no `--variant`/effort flag is 
 Interaction facts (module shape, `session.idle`/`session.created`/`session.status` events, `tool.execute.before` blocking by throwing, and the `client.session.promptAsync` injection call) are taken from the Kilo plugin documentation and its OpenCode lineage.
 The opt-in live gate `FM_KILO_PRIMARY_LIVE_E2E=1 tests/fm-kilo-primary-live-e2e.test.sh` is the command that proves them against a real kilo; `docs/verification/kilo.md` owns the recorded result and the parity caveat until it passes.
 The watch-arm coordinator key is `__firstmateKiloWatchArm`.
-The plugins stay inert outside the primary checkout and a secondmate home, exactly like the OpenCode plugins.
+Where the plugins arm and where they stay silent is owned by `docs/supervision-protocols/kilo.md`.
 
 Kilo is NOT a verified supervision-host engine: a kilo primary always runs the plain watcher arm and never spawns the supervision host, even when `config/supervision-host` exists.
 Host support is a deferred follow-up.

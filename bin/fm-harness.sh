@@ -473,7 +473,7 @@ supervision_primary_pin() {
 #     (pi-signed, which ancestry can only see as pi).
 #   - Different harness, structural ancestor: ancestry wins. This is what stops
 #     an inherited or multiplexer-retained CLAUDECODE from renaming a markerless
-#     codex, opencode, kimi, or muse session, and symmetrically stops a retained
+#     codex, opencode, kimi, muse, or kilo session, and symmetrically stops a retained
 #     CURSOR_AGENT from renaming a claude worker nested under cursor.
 #   - Different harness, interpreter-args ancestor only: the marker wins, because
 #     a harness-shaped path in some node process's arguments is weaker evidence
