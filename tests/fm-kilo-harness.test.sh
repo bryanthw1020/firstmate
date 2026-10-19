@@ -298,6 +298,64 @@ test_kilo_secondmate_launch_uses_the_persistent_model() {
   pass "fm-spawn: a real kilo secondmate launch runs the persistent supervision model"
 }
 
+# A secondmate home runs a primary firstmate session and must get plugin-owned
+# supervision exactly like the main primary. Its home is a linked git worktree
+# (git-dir != git-common-dir), so the plain-checkout test alone would exempt it;
+# only the valid .fm-secondmate-home marker force-includes it, mirroring
+# bin/fm-primary-scope-lib.sh's fm_primary_root_matches that the turn-end guard
+# already uses.
+test_kilo_watch_arm_arms_in_a_secondmate_home() {
+  local plugin base home log out status
+  plugin="$ROOT/.kilo/plugin/fm-primary-watch-arm.js"
+  base="$TMP_ROOT/kilo-secondmate-base"
+  home="$TMP_ROOT/kilo-secondmate-home"
+  log="$TMP_ROOT/kilo-secondmate-arm.log"
+  fm_git_worktree "$base" "$home" fm/kilo-secondmate-home
+  mkdir -p "$home/bin" "$home/state" "$home/config"
+  : > "$home/AGENTS.md"
+  printf 'sm-kilo-1\n' > "$home/.fm-secondmate-home"
+  cp "$ROOT/bin/fm-supervision-lib.sh" "$home/bin/fm-supervision-lib.sh"
+  cp "$ROOT/bin/fm-primary-scope-lib.sh" "$home/bin/fm-primary-scope-lib.sh"
+  : > "$home/state/task.meta"
+  cat > "$home/bin/fm-watch-arm.sh" <<'SH'
+#!/usr/bin/env bash
+printf 'arm\n' >> "${FM_ARM_LOG:?}"
+printf 'watcher: healthy pid=1 (beacon 0s)\n'
+SH
+  chmod +x "$home/bin/fm-watch-arm.sh"
+  out=$(PLUGIN="$plugin" WORKTREE="$home" FM_ROOT_OVERRIDE="$home" FM_HOME="$home" \
+    FM_STATE_OVERRIDE="$home/state" FM_CONFIG_OVERRIDE="$home/config" FM_ARM_LOG="$log" node 2>&1 <<'EOF'
+import { existsSync, writeFileSync } from "node:fs";
+import { pathToFileURL } from "node:url";
+
+const mod = await import(pathToFileURL(process.env.PLUGIN).href);
+const client = { session: { promptAsync: async () => {} } };
+await mod.default.server({
+  client,
+  directory: process.env.WORKTREE,
+  worktree: process.env.WORKTREE,
+});
+writeFileSync(`${process.env.FM_STATE_OVERRIDE}/.lock`, `${process.pid}\n`);
+const status = await globalThis.__firstmateKiloWatchArm.ensureArmed("session-test", client);
+if (status === "not-primary") {
+  console.error("kilo watch arm refused a genuine secondmate home as not-primary");
+  process.exit(1);
+}
+for (let i = 0; i < 250 && !existsSync(process.env.FM_ARM_LOG); i += 1) {
+  await new Promise((resolve) => setTimeout(resolve, 20));
+}
+if (!existsSync(process.env.FM_ARM_LOG)) {
+  console.error(`kilo watch arm did not run in a secondmate home (status ${status})`);
+  process.exit(1);
+}
+EOF
+)
+  status=$?
+  expect_code 0 "$status" "kilo watch-arm must arm in a genuine secondmate home ($out)"
+  [ -z "$out" ] || fail "kilo secondmate-arm test printed output: $out"
+  pass "kilo watch-arm arms in a home carrying a valid .fm-secondmate-home"
+}
+
 # The .kilo guard port makes the same write-to-child-stdin as its OpenCode
 # sibling. A child free to exit without reading makes that write fail with
 # EPIPE, and an unhandled stdin 'error' event takes the whole host process
@@ -362,4 +420,5 @@ test_kilo_tmux_names_the_native_binary_an_agent
 test_kilo_launch_shape_records_model_and_omits_effort_and_worktree
 test_kilo_spawn_arms_no_busy_wiring
 test_kilo_secondmate_launch_uses_the_persistent_model
+test_kilo_watch_arm_arms_in_a_secondmate_home
 test_kilo_turnend_guard_survives_an_encoder_that_never_reads_stdin

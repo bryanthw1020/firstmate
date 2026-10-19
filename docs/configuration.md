@@ -842,6 +842,7 @@ A local standalone-clone home cannot receive a primary-local commit through that
 ## Harness support
 
 claude, codex, opencode, pi, pi-signed, grok, kimi, cursor, omp, and kilo are empirically verified for crewmate and secondmate launches; gemini is verified for crewmate and scout launches only, and [README requirements](../README.md#requirements) own the set supported for the primary session.
+Kilo's primary TUI plugin stack runs at OpenCode parity pending its opt-in `FM_KILO_PRIMARY_LIVE_E2E=1` live gate, and [its verification record](verification/kilo.md) owns that boundary.
 
 ### Harness restrictions and credentials
 
