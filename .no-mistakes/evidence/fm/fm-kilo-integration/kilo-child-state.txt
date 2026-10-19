@@ -1,0 +1,5 @@
+total 16
+drwxr-xr-x  4 bryanthw  staff  128 Oct 19 13:29 .
+drwxr-xr-x  4 bryanthw  staff  128 Oct 19 13:29 ..
+-rw-r--r--  1 bryanthw  staff    6 Oct 19 13:29 .lock
+-rw-r--r--  1 bryanthw  staff   16 Oct 19 13:29 sm-fixture.meta

@@ -1,0 +1,3 @@
+exec kilo --auto
+t5svxs2d5y3bghphwkqr1ft40000gn/T/fm-lab-kilo-signals.jKpUNF
+❯ exec kilo --auto

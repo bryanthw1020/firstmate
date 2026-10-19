@@ -1,0 +1,39 @@
+
+  ┃
+  ┃  Reply with exactly: READY
+  ┃
+
+     + Thought: 788ms
+
+     READY
+
+     ▣  Code · DeepSeek: DeepSeek V4.1 Flash · 18.8s
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ┃
+  ┃
+  ┃
+  ┃  Code  auto · DeepSeek: DeepSeek V4.1 Flash Kilo Gateway · max
+  ╹▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+                                                               ctrl+t variants  181.6K (17%) · $0.04  ctrl+p commands

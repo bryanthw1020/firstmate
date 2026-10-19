@@ -1,0 +1,18 @@
+FM_TEST_BEGIN 2026-10-19T05:18:43Z tests/fm-kilo-harness.test.sh family=pure-contract-unit expected_gate_skip=none
+ok - fm-harness.sh: ancestry detects a natively-named kilo command
+ok - fm-harness.sh: ancestry rejects unrelated kilo mentions
+ok - fm-harness.sh: no fork-lineage or inherited marker claims the kilo identity
+ok - fm-control-lib: kilo mechanics are Escape twice, no clear key, and /exit
+ok - fm-busy-lib: only the pinned esc-interrupt footer carries the kilo busy verdict
+ok - fm-composer-lib: kilo delivery signatures never cross harnesses
+ok - fm-busy-lib: kilo classifies busy on its marker and unknown without it
+ok - bin/fm-agent-process-lib.sh: kilo is an agent, fragments are not
+ok - fm-spawn: kilo launch carries the brief and model, clears markers, and omits effort and worktree
+ok - fm-spawn: kilo arms no busy wiring (rendered-tail fallback only)
+ok - fm-spawn: a real kilo secondmate launch runs the persistent supervision model
+ok - kilo watch-arm arms in a home carrying a valid .fm-secondmate-home
+ok - kilo turn-end guard survives an encoder that never reads stdin
+FM_TEST_END 2026-10-19T05:19:03Z tests/fm-kilo-harness.test.sh exit=0 duration_ms=20110 gate_skip=false
+FM_TEST_SUMMARY total=1 failed=0 skipped_gate=0 duration_ms=20279
+FM_TEST_SUMMARY_FAMILY family=pure-contract-unit count=1 duration_ms=20110 failed=0
+FM_TEST_SLOWEST rank=1 script=tests/fm-kilo-harness.test.sh duration_ms=20110

@@ -1,0 +1,7 @@
+pane=w1:p1
+composer_ready=1
+kilo_pid=84392
+kilo_comm=/opt/homebrew/Cellar/kilo/7.8.12/libexec/kilo
+busy_matched=1
+interrupted=1
+exited=1

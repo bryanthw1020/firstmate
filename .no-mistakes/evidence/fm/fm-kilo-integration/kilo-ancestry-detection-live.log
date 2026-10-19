@@ -1,0 +1,5 @@
+### live kilo 7.8.12 ancestry detection: a bash-tool child of a real kilo process ran bin/fm-harness.sh
+--- bin/fm-harness.sh output (from the real kilo child) ---
+kilo
+rc=0
+--- kilo process comm ---

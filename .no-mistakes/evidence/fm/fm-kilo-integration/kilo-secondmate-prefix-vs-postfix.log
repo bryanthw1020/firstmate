@@ -1,0 +1,7 @@
+### secondmate home arming: pre-fix vs post-fix, same genuine .fm-secondmate-home (linked worktree)
+--- PRE-FIX watch-arm (0b15dff) ---
+refused a genuine secondmate home as not-primary
+prefix_exit=1
+--- POST-FIX watch-arm (aa992c2) ---
+ARMED
+postfix_exit=0

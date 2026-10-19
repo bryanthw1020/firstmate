@@ -1,0 +1,13 @@
+total 24
+drwxr-xr-x  12 bryanthw  staff   384 Oct 19 13:29 .
+drwxr-xr-x  33 bryanthw  staff  1056 Oct 19 13:28 ..
+-rw-r--r--   1 bryanthw  staff     0 Oct 19 13:29 .last-heartbeat
+-rw-r--r--   1 bryanthw  staff     0 Oct 19 13:29 .last-watcher-beat
+-rw-r--r--   1 bryanthw  staff     6 Oct 19 13:28 .lock
+-rw-r--r--   1 bryanthw  staff     0 Oct 19 13:29 .secondmate-liveness-tick
+drwx------   3 bryanthw  staff    96 Oct 19 13:29 .wake-queue.lock.owner.xa06S4
+-rw-------   1 bryanthw  staff     0 Oct 19 13:29 .watch-arm-output.MNHivK
+-rw-------   1 bryanthw  staff    35 Oct 19 13:29 .watch-arm-output.xVTBLm
+lrwxr-xr-x   1 bryanthw  staff   112 Oct 19 13:29 .watch.lock -> /private/var/folders/p2/t5svxs2d5y3bghphwkqr1ft40000gn/T/fm-lab-kilo-sm.t92biU/sm/state/.watch.lock.owner.jHJx8x
+drwx------   6 bryanthw  staff   192 Oct 19 13:29 .watch.lock.owner.jHJx8x
+-rw-r--r--   1 bryanthw  staff    16 Oct 19 13:28 sm-fixture.meta
